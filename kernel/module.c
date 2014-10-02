@@ -1111,6 +1111,13 @@ static int check_version(Elf_Shdr *sechdrs,
 	unsigned int i, num_versions;
 	struct modversion_info *versions;
 
+	/* HACK to load closed source wlan module */
+	if (!strncmp("wlan", mod->name, 4)) {
+		printk(KERN_WARNING "wlan module detected, ignore the check."
+				"I'm not responsible for any dubious code from this module.\n");
+		return 1;
+	}
+
 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
 	if (!crc)
 		return 1;
@@ -1141,6 +1148,14 @@ static int check_version(Elf_Shdr *sechdrs,
 bad_version:
 	printk("%s: disagrees about version of symbol %s\n",
 	       mod->name, symname);
+
+	/* HACK to load closed source wlan module */
+	if (!strncmp("wlan", mod->name, 4)) {
+		printk(KERN_WARNING "wlan module detected, ignore the check."
+				"I'm not responsible for any dubious code from this module.\n");
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -2551,9 +2566,15 @@ static int check_modinfo(struct module *mod, struct load_info *info)
 		if (err)
 			return err;
 	} else if (!same_magic(modmagic, vermagic, info->index.vers)) {
-		printk(KERN_ERR "%s: version magic '%s' should be '%s'\n",
-		       mod->name, modmagic, vermagic);
-		return -ENOEXEC;
+		/* HACK to load closed source wlan module */
+		if (!strncmp("wlan", mod->name, 4)) {
+			 printk(KERN_WARNING "wlan module detected, ignore the check."
+				"I'm not responsible for any dubious code from this module.\n");
+		} else { 
+			 printk(KERN_ERR "%s: version magic '%s' should be '%s'\n",
+				 mod->name, modmagic, vermagic);
+			 return -ENOEXEC;
+		}
 	}
 
 	if (!get_modinfo(info, "intree"))

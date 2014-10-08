@@ -75,6 +75,12 @@ config IOSCHED_SIOPLUS
 	  mainly for aleatory access devices (eg: flash devices).
 	  The plus version fixes writes_starved not being initialized on startup
 	  and also modifies the write starvation counting logic.
+config IOSCHED_VR
+	tristate "V(R) I/O scheduler"
+	default y
+	---help---
+	  Requests are chosen according to SSTF with a penalty of rev_penalty
+	  for switching head direction.
 
 choice
 	prompt "Default I/O scheduler"
@@ -97,6 +103,8 @@ choice
 
 	config DEFAULT_SIOPLUS
 		bool "sioplus" if IOSCHED_SIOPLUS=y
+	config DEFAULT_VR
+		bool "vr" if IOSCHED_VR=y
 
 endchoice
 
@@ -107,6 +115,7 @@ config DEFAULT_IOSCHED
 	default "noop" if DEFAULT_NOOP
 	default "sio" if DEFAULT_SIO
 	default "sioplus" if DEFAULT_SIOPLUS
+	default "vr" if DEFAULT_VR
 
 endmenu
 

@@ -147,6 +147,11 @@ config CPU_FREQ_DEFAULT_GOV_NIGHTMARE
 	select CPU_FREQ_GOV_NIGHTMARE
 	help
 
+config CPU_FREQ_DEFAULT_GOV_ALUCARD
+	bool "alucard"
+	select CPU_FREQ_GOV_ALUCARD
+	help
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -313,6 +318,10 @@ config CPU_FREQ_GOV_DARKNESS
 
 config CPU_FREQ_GOV_NIGHTMARE
 	tristate "'nightmare' cpufreq governor"
+	depends on CPU_FREQ
+
+config CPU_FREQ_GOV_ALUCARD
+	tristate "'alucard' cpufreq governor"
 	depends on CPU_FREQ
 
 menu "x86 CPU frequency scaling drivers"

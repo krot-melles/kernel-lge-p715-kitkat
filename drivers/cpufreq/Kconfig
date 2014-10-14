@@ -191,6 +191,12 @@ config CPU_FREQ_DEFAULT_GOV_SCARY
 	help
 	  Use the CPUFreq governor 'pegasusq' as default
 
+config CPU_FREQ_DEFAULT_GOV_SAVAGEDZEN
+	bool "SavagedZen"
+	select CPU_FREQ_GOV_SAVAGEDZEN
+	help
+	  Use the CPUFreq governor 'savagedzen' as default
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -400,6 +406,13 @@ config CPU_FREQ_GOV_PEGASUSQ
 config CPU_FREQ_GOV_SCARY
 	tristate "'scary' cpufreq governor"
 	depends on CPU_FREQ
+
+config CPU_FREQ_GOV_SAVAGEDZEN
+	tristate "'savagedzen' cpufreq governor"
+	depends on CPU_FREQ
+	help
+	   'Savaged-Zen' - a "smartass" based governor
+	   If in doubt, say N.
 
 menu "x86 CPU frequency scaling drivers"
 depends on X86
